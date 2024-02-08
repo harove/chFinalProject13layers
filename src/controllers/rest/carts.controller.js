@@ -1,17 +1,17 @@
 // import { cartsManager as manager } from "../dao/cartsManager.js"
 import { cartsManager as manager } from "../../dao/index.js"
 import mongoose from 'mongoose';
-import util from 'node:util'
+import { cartsService } from "../../services/carts.service.js";
 
 //creating cart
 export async function postController(req, res) {
     const pojo = req.body
     try {
-        const document = await manager.create(pojo)
+        const document = await cartsService.create(pojo)
         // const pojos = await manager.findAll()
-        const pojos = await manager.find().lean()
+        const pojos = await cartsService.find()
         pojos.push(pojo)
-        res.json(document.toObject())
+        res.json(document)
     } catch (error) {
         res.status(400).json({
             message: error.message
@@ -24,7 +24,7 @@ export async function getByIdController(req, res) {
     const id = req.params.id
     try {
         // const pojo = await manager.listProductsInCart(id)
-        const pojo = await manager.find({_id: id})
+        const pojo = await cartsService.find({_id: id})
         // res.json(pojo)
         res.json(pojo)
     } catch (error) {
@@ -40,7 +40,7 @@ export async function addProductToCartController(req, res) {
     const pid = req.params.pid
     try {
         // const pojo = await manager.addProductToCart({cid,pid})
-        const cart = await manager.findById(cid)
+        const cart = await cartsService.findById(cid)
         const pidIndex = cart.products.findIndex(product=> new mongoose.Types.ObjectId(product._id).equals(pid))
         if (pidIndex === -1){
             cart.products.push({_id:pid, quantity:1})
@@ -63,7 +63,7 @@ export async function updateQuantityOfProductFromCartController(req, res) {
     const {quantity} = req.body
     try {
         // const pojo = await manager.addProductToCart({cid,pid})
-        const cart = await manager.findById(cid)
+        const cart = await cartsService.findById(cid)
         const pidIndex = cart.products.findIndex(product=>product.id === pid)
         if (pidIndex === -1){
             throw new Error('Product not found')
@@ -84,7 +84,7 @@ export async function deleteAllProductsFromCartController(req, res) {
     const cid = req.params.cid
     try {
         // const pojo = await manager.addProductToCart({cid,pid})
-        const cart = await manager.findById(cid)
+        const cart = await cartsService.findById(cid)
         if (cart === null){
             throw new Error('Cart not found')
         }else{
