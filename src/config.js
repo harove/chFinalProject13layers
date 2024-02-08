@@ -15,3 +15,5 @@ export const COOKIE_OPTIONS = {
 }
 export const JWT_PRIVATE_KEY = 'jwtSecret'
 export const DEFAULT_USER_AVATAR_PATH = './static/imgs/default-user.webp'
+export const MODO_EJECUCION = 'online'
+// export const MODO_EJECUCION = 'offline'
