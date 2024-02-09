@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose"
+import mongoose, {Schema, Types} from "mongoose"
 import { randomUUID } from "node:crypto"
 import { hasheadasSonIguales, hashear } from '../utils/criptografia.js'
 import { DEFAULT_USER_AVATAR_PATH } from "../config.js"
@@ -8,15 +8,20 @@ const collection = 'usuarios'
 
 const schema = new Schema({
     // _id: {type: String, default: randomUUID},
-    _id: {
-        type: Schema.Types.ObjectId,
-        ref: 'carts', // Reference to the 'products' collection
-        required: true,
-    },
+    // _id: {
+    //     type: Schema.Types.ObjectId,
+    //     default: Types.ObjectId
+    // },
     first_name: {type: String, required: true},
     last_name: {type: String, required: true},
     email: { type: String, required: true},
+    age: { type: Number, required: true},
     password: {type: String, required: true},
+    cart: {
+        type: Schema.Types.ObjectId,
+        ref: 'carts',
+        required: false
+    },
     // foto: { type: String, default: DEFAULT_USER_AVATAR_PATH},
     rol: {type: String, enum:['admin', 'user'], default: 'user'}
 }, {

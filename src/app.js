@@ -7,12 +7,15 @@ import connectMongo from 'connect-mongo'
 // import { productsManager } from './dao/productsManager.js'
 import { productsManager, messagesManager } from './dao/index.js'
 import session from 'express-session'
-import { MONGODB_CNX_STR, SESSION_SECRET } from './config.js'
+import { MONGODB_CNX_STR  } from './config.js'
 // import { sesiones } from './middlewares/sesiones.js'
 import { passportInitialize } from './middlewares/autenticaciones.js'
 import { cookies } from './middlewares/cookies.js'
+import 'dotenv/config'
 
 // import {  } from './midlewares/midlewares.js'
+
+const PORT = process.env.PORT
 
 const store = connectMongo.create({
     mongoUrl: MONGODB_CNX_STR,
@@ -41,7 +44,9 @@ app.use('/static', express.static('./static'))
 
 
 //Para saber en que puerto esta funcionando.
-const server = app.listen(8080, ()=> {console.log('Server ON: 8080')})
+const server = app.listen(PORT, ()=> {
+    console.log(`Server ON: ${PORT}`)
+})
 
 const webSocketServer = new Server(server)
 
